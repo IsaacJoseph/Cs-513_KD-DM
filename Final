@@ -1,1 +1,55 @@
+###################################################################################
+# Topic/Project   : Stevens, FINAL
+# Purpose         : #1, AdmissionB.csv, H-Clust and K-means
+# First Name      : Isaac
+# Last Name       : Miller
+# Date            : December 16, 2020
+###################################################################################
+
+###################################################################################
+        ##########      QUESTIONS     ##########
+
+# Cluser applicants in "AdmissionB.csv" into 2 cluster using the GRE, the GPA, and the RRANK
+# variables. Compare the hour clusters for each of the following two methods.
+
+###################################################################################
+
+# (1) Remove anything from the enviornment
+rm(list=ls())
+
+# (2) Set the working directory:
+file<-filename<-file.choose()
+df<-read.csv(file)
+
+# (3) Review the data
+summary(df)
+View(df)
+
+# (4) Review any Missing Variables and Factor Data
+df<-na.omit(df)
+summary(df)
+
+# (5) Remove the columns
+df1<-df[-3]
+df1<-df1[-5]
+df_dist<-dist(df1)
+
+# (6) Implement the Hierarchial Clustering
+hclust_results<-hclust(df_dist)
+
+# (7) Plot the HCluster
+plot(hclust_results)
+hclust_2<-cutree(hclust_results,2)
+
+# (8) Forming the Matrix [HCluster]
+table(hclust_2,df[,3])
+
+
+# (9) Applying K-Means
+kmeans_2<- kmeans(df1,2,nstart = 4)
+kmeans_2$cluster
+
+# (10) Forming the Matrix [K-Means]
+table(kmeans_2$cluster, df1[,3])
+
 
