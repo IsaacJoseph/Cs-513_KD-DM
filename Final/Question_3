@@ -1,0 +1,76 @@
+###################################################################################
+# Topic/Project   : Stevens, FINAL
+# Purpose         : #2, AdmissionB.csv, ANN, test/training
+# First Name      : Isaac
+# Last Name       : Miller
+# Date            : December 16, 2020
+###################################################################################
+
+###################################################################################
+##########      QUESTIONS     ##########
+
+# Cluser applicants in "AdmissionB.csv" into 2 cluster using the GRE, the GPA, and the RRANK
+# variables. Compare the hour clusters for each of the following two methods.
+#
+# - Load the AdmissionB dataset from CANVAS
+# - Store every fourth record in a "test" dataset starting with the first record
+# - Store the rest in the "training" dataset
+# - Use ANN with 6 hidden nodes to classify applicants (ADMIT=1 vs 0)
+# - Measure the performance of the model against the test data
+
+###################################################################################
+
+# (1) Remove anything from the enviornment
+rm(list=ls())
+
+# (2) Set the working directory:
+file<-filename<-file.choose()
+df<-read.csv(file)
+
+# (3) Review the data
+summary(df)
+View(df)
+
+# (4) Review any Missing Variables and Factor Data
+df_1<-data.frame(lapply(na.omit(df),as.numeric))
+View(df_1)
+
+# (5) Sort the data and create a test and training module
+# This is a 75% Training and 25% Testing - this is random
+index<-sort(sample(nrow(df_1),round(.25*nrow(df_1))))
+training<-df_1[-index,]
+test<- df_1[index,]
+
+# This is dividing the rows 1-4; will be training. Every 5th row will be testing
+# 80% training and 20% testing
+index <- seq (1, nrow(df_1),by=4)
+test2 <- df_1[index,]
+training2 <- df_1[-index,]
+
+# (6) Using the Neural Network Library 
+# instal.packages("neuralnet")
+library("neuralnet")
+
+# (7) Run and initiate ANN
+# Class = defining it elsewhere and creating it as an object
+class(training2$Admit)
+net_df1<- neuralnet( Admit~. training2, hidden=6, threshold=0.01)
+
+# (8) Plot the Neural Network
+plot(net_df1)
+
+# (9) Test should have only the input column
+ann <- compute(net_df1, test[,-1])
+ann$net.result
+
+# (10) Further ANN Testing
+ann_cat <- ifelse(ann$net.result <1.5, 1,2)
+length(ann_cat)
+
+# (11) Create an ANN Table with Actual and Prediction
+table(Actual=test$Admit,prediction=ann_cat)
+
+# (12) Calculating The Error Rate
+wrong <- (test$Admit!=ann_cat)
+error_rate <- sum(wrong)/length(wrong)
+error_rate
