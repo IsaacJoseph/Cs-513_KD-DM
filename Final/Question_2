@@ -1,0 +1,32 @@
+###################################################################################
+# Topic/Project   : Stevens, FINAL
+# Purpose         : #2, AdmissionB.csv, ANN
+# First Name      : Isaac
+# Last Name       : Miller
+# Date            : December 16, 2020
+###################################################################################
+
+###################################################################################
+        ##########      QUESTIONS     ##########
+
+# Cluser applicants in "AdmissionB.csv" into 2 cluster using the GRE, the GPA, and the RRANK
+# variables. Compare the hour clusters for each of the following two methods.
+#
+# - Load the AdmissionB dataset from CANVAS
+# - Store every fourth record in a "test" dataset starting with the first record
+# - Store the rest in the "training" dataset
+# - Use ANN with 6 hidden nodes to classify applicants (ADMIT=1 vs 0)
+# - Measure the performance of the model against the test data
+
+###################################################################################
+
+# (1) Remove anything from the enviornment
+rm(list=ls())
+
+# (2) Set the working directory:
+file<-filename<-file.choose()
+df<-read.csv(file)
+
+# (3) Review the data
+summary(df)
+View(df)
